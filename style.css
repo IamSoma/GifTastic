@@ -1,0 +1,48 @@
+.container{
+	float: center;
+}
+.searchButton {
+	padding: 10px;
+	margin: 10px;
+	color: white;
+	background-color: black;
+	font-family: oblique;
+	font-size: 25px;
+}
+
+#search-form {
+	border-style: solid;
+	padding: 20px;
+	width: 225px;
+	margin: auto;
+}
+
+.search-item {
+	column-count: 2;
+	border-style: solid;
+	border-color: black;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	height: 400px;
+}
+.searchImage{
+	padding: 5px;
+	margin: auto;
+	border-style: solid;
+	border-color: black;
+}
+
+h1{
+	text-align: center;
+}
+p{
+	text-align: center;
+	border-bottom: 10px;
+	border-style: solid;
+	border-color: black;
+	font-size: 40px;
+	background-color: black;
+	color: white;
+	font-family: oblique;
+}
