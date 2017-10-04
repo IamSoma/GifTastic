@@ -1,36 +1,61 @@
-$(window).load(function(){
-  topicsButtons(topics,'searchNames', '.buttons');
-  $('.topicButton').on('click', function(){
-    alert('event handlerworking');
-  })
-
+$(function(){
+  topicsButtons(topics, 'searchButton', '.buttons');
 })
 
-  var topics = ["space", "stars", "planets", "spaceships", "aliens", "spacebattles"];
+var topics = ["space", "stars", "planets", "spaceships", "aliens", "spacebattles"];
 
-function topicsButtons(topics, classAdder, buttonAdder){
-    $(buttonAdder).empty();
+function topicsButtons(topics, classAdder, areaToAddTo){
+  $(areaToAddTo).empty();
 	for (var i=0; i<topics.length; i++) {
-      var myElement = $('<button>');  
-      myElement.addClass("topicButton");      
-      myElement.attr("data-type", topics[i]);     
-      myElement.text(topics[i]);
-      $(buttonAdder).append(a);
-      // $("#buttons-view").append(a);
+      var foo = $('<button>');  
+      foo.addClass(classAdder);      
+      foo.attr("data-type", topics[i]);     
+      foo.text(topics[i]);
+      $(areaToAddTo).append(foo);
      }
-  }
-    // $("#button").on("click", function() {
-    //   var key = "Wlr6m0r2PKy2X6cGhYt3xRpFVa01vrAC&";
-    //   var queryURL = "http://api.giphy.com/v1/gifs/random?api_key="+ key +"tag="+ topics[1];
-    //   $.ajax({
-    //     url: queryURL,
-    //     method: "GET"
-    //   }).done(function(res) {
-    //     var imageUrl = res.data.image_original_url;
-    //     var spaceImage = $("<img>");
-    //     spaceImage.attr("src", imageUrl);
-    //     spaceImage.attr("alt", "space image");
-    //     $(".images").prepend(spaceImage);
-    //   });
-    // });
+   }
+$(document).on("click",'.searchButton', function() {
+  $('#searches').empty();
+  var type = $(this).data('type'); 
+  var queryURL = "http://api.giphy.com/v1/gifs/search?q="+type+"&api_key=Wlr6m0r2PKy2X6cGhYt3xRpFVa01vrAC&limit=10";
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).done(function(res){ 
+    for(var i=0; i<res.data.length; i++){
+      var searchDiv = $('<div class="search-item">');
+      var ratings = res.data[i].rating;
+      var p = $('<p>').text('Rating: '+ratings);
+      var animated = res.data[i].images.fixed_height.url;
+      var still = res.data[i].images.fixed_height_still.url;
+      var image = $('<img>');
+      image.attr('src',still);
+      image.attr('data-still',still);
+      image.attr('data-animated', animated);
+      image.attr('data-state','still');
+      image.addClass('searchImage');
+      searchDiv.append(p);
+      searchDiv.append(image);
+      $('#searches').append(searchDiv); 
+    }
+  });
+});
 
+$(document).on('click','.searchImage', function(){
+  var state = $(this).attr('data-state');
+  if(state=='still'){
+    $(this).attr('src',$(this).data('animated'));
+    $(this).attr('data-state','animated');
+  } else {
+    $(this).attr('src',$(this).data('still'));
+    $(this).attr('data-state','still');
+  }
+})
+
+$('#topicAdder').on('click', function(){
+  var newSearch = $('input').eq(0).val();
+  topics.push(newSearch);
+  topicsButtons(topics, 'searchButton', '.buttons');
+  return false;
+
+})
